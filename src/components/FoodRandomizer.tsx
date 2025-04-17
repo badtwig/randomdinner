@@ -1,8 +1,23 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Utensils, Shuffle, BookOpen, ShoppingCart, ShoppingBag } from "lucide-react";
+
+// Emoji mappings for cuisines and proteins
+const CUISINE_EMOJIS = {
+  "Asian": "🥢",
+  "Italian": "🍝",
+  "Indian": "🍛",
+  "Mexican": "🌮",
+  "Mediterranean": "🫒"
+};
+
+const PROTEIN_EMOJIS = {
+  "Veggie Only": "🥗",
+  "Red Meat": "🥩", 
+  "Chicken": "🍗",
+  "Fish": "🐟"
+};
 
 // Food combination data
 const FOOD_COMBINATIONS = [
@@ -87,10 +102,12 @@ export const FoodRandomizer = () => {
           {hasRandomized && currentFood ? (
             <div className="text-center animate-bounce-in">
               <h2 className="text-3xl font-semibold text-gray-800 mb-3">
-                {currentFood.cuisine}
+                {CUISINE_EMOJIS[currentFood.cuisine as keyof typeof CUISINE_EMOJIS]} {currentFood.cuisine}
               </h2>
               <div className="w-16 h-1 bg-primary mx-auto mb-3 rounded-full"></div>
-              <p className="text-xl text-primary font-medium">{currentFood.protein}</p>
+              <p className="text-xl text-primary font-medium">
+                {PROTEIN_EMOJIS[currentFood.protein as keyof typeof PROTEIN_EMOJIS]} {currentFood.protein}
+              </p>
             </div>
           ) : (
             <div className="text-center text-gray-500">
