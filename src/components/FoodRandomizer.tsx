@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Utensils, Shuffle, BookOpen, ShoppingCart, ShoppingBag } from "lucide-react";
+import { toast } from "@/components/ui/sonner";
 
 // Emoji mappings for cuisines and proteins
 const CUISINE_EMOJIS = {
@@ -54,8 +55,18 @@ export const FoodRandomizer = () => {
 
   const randomizeFood = () => {
     const randomIndex = Math.floor(Math.random() * FOOD_COMBINATIONS.length);
-    setCurrentFood(FOOD_COMBINATIONS[randomIndex]);
+    const newFood = FOOD_COMBINATIONS[randomIndex];
+    setCurrentFood(newFood);
     setHasRandomized(true);
+
+    // Add toasts for cuisine and protein
+    toast.info(`Cuisine: ${newFood.cuisine}`, {
+      description: `You got ${CUISINE_EMOJIS[newFood.cuisine as keyof typeof CUISINE_EMOJIS]} ${newFood.cuisine}!`,
+    });
+    
+    toast.success(`Protein: ${newFood.protein}`, {
+      description: `Paired with ${PROTEIN_EMOJIS[newFood.protein as keyof typeof PROTEIN_EMOJIS]} ${newFood.protein}!`,
+    });
   };
 
   const getSearchQuery = () => {
