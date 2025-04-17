@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { Utensils, Shuffle, BookOpen, ShoppingCart, ShoppingBag } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 
-// Emoji mappings for cuisines and proteins
 const CUISINE_EMOJIS = {
   "Asian": "🥢",
   "Italian": "🍝",
@@ -20,7 +19,6 @@ const PROTEIN_EMOJIS = {
   "Fish": "🐟"
 };
 
-// Food combination data
 const FOOD_COMBINATIONS = [
   { cuisine: "Asian", protein: "Veggie Only" },
   { cuisine: "Italian", protein: "Red Meat" },
@@ -48,7 +46,6 @@ export const FoodRandomizer = () => {
   const [currentFood, setCurrentFood] = useState<{ cuisine: string; protein: string } | null>(null);
   const [hasRandomized, setHasRandomized] = useState(false);
   
-  // Set document title
   useEffect(() => {
     document.title = "Food Fortune | What's For Dinner?";
   }, []);
@@ -58,15 +55,6 @@ export const FoodRandomizer = () => {
     const newFood = FOOD_COMBINATIONS[randomIndex];
     setCurrentFood(newFood);
     setHasRandomized(true);
-
-    // Add toasts for cuisine and protein
-    toast.info(`Cuisine: ${newFood.cuisine}`, {
-      description: `You got ${CUISINE_EMOJIS[newFood.cuisine as keyof typeof CUISINE_EMOJIS]} ${newFood.cuisine}!`,
-    });
-    
-    toast.success(`Protein: ${newFood.protein}`, {
-      description: `Paired with ${PROTEIN_EMOJIS[newFood.protein as keyof typeof PROTEIN_EMOJIS]} ${newFood.protein}!`,
-    });
   };
 
   const getSearchQuery = () => {
@@ -79,7 +67,6 @@ export const FoodRandomizer = () => {
     return `${currentFood.cuisine} ${currentFood.protein}`;
   };
 
-  // Handle the button actions
   const handleFindRecipes = () => {
     if (!currentFood) return;
     const query = getSearchQuery();
@@ -94,8 +81,6 @@ export const FoodRandomizer = () => {
 
   const handleGroceryList = () => {
     if (!currentFood) return;
-    // This is a simplified approach - in a real app, we might want to 
-    // generate an actual grocery list or save it to local storage
     const query = getSearchQuery();
     window.open(`https://www.google.com/search?q=${encodeURIComponent(query + " ingredients")}`, "_blank");
   };
@@ -112,13 +97,23 @@ export const FoodRandomizer = () => {
         <div className="min-h-40 flex items-center justify-center">
           {hasRandomized && currentFood ? (
             <div className="text-center animate-bounce-in">
-              <h2 className="text-3xl font-semibold text-gray-800 mb-3">
-                {CUISINE_EMOJIS[currentFood.cuisine as keyof typeof CUISINE_EMOJIS]} {currentFood.cuisine}
-              </h2>
+              <div className="flex justify-center items-center space-x-4 mb-3">
+                <span className="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                  Cuisine
+                </span>
+                <h2 className="text-3xl font-semibold text-gray-800">
+                  {CUISINE_EMOJIS[currentFood.cuisine as keyof typeof CUISINE_EMOJIS]} {currentFood.cuisine}
+                </h2>
+              </div>
               <div className="w-16 h-1 bg-primary mx-auto mb-3 rounded-full"></div>
-              <p className="text-xl text-primary font-medium">
-                {PROTEIN_EMOJIS[currentFood.protein as keyof typeof PROTEIN_EMOJIS]} {currentFood.protein}
-              </p>
+              <div className="flex justify-center items-center space-x-4">
+                <span className="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                  Protein
+                </span>
+                <p className="text-xl text-primary font-medium">
+                  {PROTEIN_EMOJIS[currentFood.protein as keyof typeof PROTEIN_EMOJIS]} {currentFood.protein}
+                </p>
+              </div>
             </div>
           ) : (
             <div className="text-center text-gray-500">
