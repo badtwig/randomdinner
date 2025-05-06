@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,6 +14,7 @@ const CUISINE_EMOJIS = {
   "Vietnamese": "🍜",
   "Italian": "🍝",
   "Indian": "🍛",
+  "Pakistani": "🍲", // Added Pakistani cuisine with an appropriate emoji
   "Mexican": "🌮",
   "African": "🍲",
   "Middle Eastern": "🫒"
@@ -46,6 +48,10 @@ const FOOD_COMBINATIONS = [
   { cuisine: "Indian", protein: "Fish" },
   { cuisine: "Mexican", protein: "Red Meat" },
   { cuisine: "Middle Eastern", protein: "Chicken" },
+  // Added Pakistani cuisine combinations
+  { cuisine: "Pakistani", protein: "Chicken" },
+  { cuisine: "Pakistani", protein: "Red Meat" },
+  { cuisine: "Pakistani", protein: "Veggie Only" },
 ];
 
 export const FoodRandomizer = () => {
