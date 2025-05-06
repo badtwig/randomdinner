@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Utensils, Shuffle, BookOpen, ShoppingCart, ShoppingBag } from "lucide-react";
+import { Utensils, Shuffle, BookOpen, ShoppingBag, Filter } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const CUISINE_EMOJIS = {
   "Asian": "🥢",
@@ -45,14 +47,30 @@ const FOOD_COMBINATIONS = [
 export const FoodRandomizer = () => {
   const [currentFood, setCurrentFood] = useState<{ cuisine: string; protein: string } | null>(null);
   const [hasRandomized, setHasRandomized] = useState(false);
+  const [cuisineFilter, setCuisineFilter] = useState<string | null>(null);
+  const [proteinFilter, setProteinFilter] = useState<string | null>(null);
   
   useEffect(() => {
     document.title = "Food Fortune | What's For Dinner?";
   }, []);
 
   const randomizeFood = () => {
-    const randomIndex = Math.floor(Math.random() * FOOD_COMBINATIONS.length);
-    const newFood = FOOD_COMBINATIONS[randomIndex];
+    // Filter combinations based on user selections
+    const filteredCombinations = FOOD_COMBINATIONS.filter(combo => {
+      const cuisineMatch = !cuisineFilter || combo.cuisine === cuisineFilter;
+      const proteinMatch = !proteinFilter || combo.protein === proteinFilter;
+      return cuisineMatch && proteinMatch;
+    });
+
+    if (filteredCombinations.length === 0) {
+      toast.error("No matching combinations found", {
+        description: "Please try different filter options",
+      });
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * filteredCombinations.length);
+    const newFood = filteredCombinations[randomIndex];
     setCurrentFood(newFood);
     setHasRandomized(true);
   };
@@ -79,18 +97,41 @@ export const FoodRandomizer = () => {
     window.open(`https://www.ubereats.com/search?q=${encodeURIComponent(query)}`, "_blank");
   };
 
-  const handleGroceryList = () => {
-    if (!currentFood) return;
-    const query = getSearchQuery();
-    window.open(`https://www.google.com/search?q=${encodeURIComponent(query + " ingredients")}`, "_blank");
-  };
-
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col items-center">
       <div className="mb-6 text-center">
         <Utensils className="w-12 h-12 mx-auto text-primary mb-4" />
         <h1 className="text-4xl font-bold mb-2">Food Fortune</h1>
         <p className="text-lg text-gray-600">Can't decide what to eat? Let us pick for you!</p>
+      </div>
+
+      <div className="w-full mb-6 space-y-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Filter size={16} className="text-primary" />
+          <h3 className="font-medium">Filters</h3>
+        </div>
+        
+        <div className="space-y-2">
+          <p className="text-sm text-gray-500">Cuisine:</p>
+          <ToggleGroup type="single" value={cuisineFilter || ""} onValueChange={(value) => setCuisineFilter(value || null)} className="flex flex-wrap justify-center gap-2">
+            {Object.keys(CUISINE_EMOJIS).map((cuisine) => (
+              <ToggleGroupItem key={cuisine} value={cuisine} className="px-3 py-1 border rounded-full text-sm">
+                {CUISINE_EMOJIS[cuisine as keyof typeof CUISINE_EMOJIS]} {cuisine}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+        
+        <div className="space-y-2">
+          <p className="text-sm text-gray-500">Protein:</p>
+          <ToggleGroup type="single" value={proteinFilter || ""} onValueChange={(value) => setProteinFilter(value || null)} className="flex flex-wrap justify-center gap-2">
+            {Object.keys(PROTEIN_EMOJIS).map((protein) => (
+              <ToggleGroupItem key={protein} value={protein} className="px-3 py-1 border rounded-full text-sm">
+                {PROTEIN_EMOJIS[protein as keyof typeof PROTEIN_EMOJIS]} {protein}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
       </div>
 
       <Card className="w-full p-6 mb-6 border-dashed border-2 bg-food-secondary shadow-sm hover:shadow-md transition-all duration-300">
@@ -132,7 +173,7 @@ export const FoodRandomizer = () => {
       </Button>
 
       {hasRandomized && currentFood && (
-        <div className="grid grid-cols-3 gap-4 w-full animate-fade-in">
+        <div className="grid grid-cols-2 gap-4 w-full animate-fade-in">
           <Button
             onClick={handleFindRecipes}
             variant="outline"
@@ -149,15 +190,6 @@ export const FoodRandomizer = () => {
           >
             <ShoppingBag className="w-5 h-5 mb-1" />
             <span className="text-xs sm:text-sm font-medium">Uber Eats</span>
-          </Button>
-          
-          <Button
-            onClick={handleGroceryList}
-            variant="outline"
-            className="flex flex-col items-center justify-center p-4 h-auto border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
-          >
-            <ShoppingCart className="w-5 h-5 mb-1" />
-            <span className="text-xs sm:text-sm font-medium">Grocery List</span>
           </Button>
         </div>
       )}
