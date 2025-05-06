@@ -8,11 +8,15 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const CUISINE_EMOJIS = {
-  "Asian": "🥢",
+  "Chinese": "🥢",
+  "Japanese": "🍱",
+  "Thai": "🍛",
+  "Vietnamese": "🍜",
   "Italian": "🍝",
   "Indian": "🍛",
   "Mexican": "🌮",
-  "Mediterranean": "🫒"
+  "African": "🍲",
+  "Middle Eastern": "🫒"
 };
 
 const PROTEIN_EMOJIS = {
@@ -23,26 +27,26 @@ const PROTEIN_EMOJIS = {
 };
 
 const FOOD_COMBINATIONS = [
-  { cuisine: "Asian", protein: "Veggie Only" },
+  { cuisine: "Chinese", protein: "Veggie Only" },
   { cuisine: "Italian", protein: "Red Meat" },
   { cuisine: "Indian", protein: "Chicken" },
   { cuisine: "Mexican", protein: "Veggie Only" },
-  { cuisine: "Mediterranean", protein: "Fish" },
-  { cuisine: "Asian", protein: "Red Meat" },
+  { cuisine: "African", protein: "Fish" },
+  { cuisine: "Japanese", protein: "Red Meat" },
   { cuisine: "Italian", protein: "Veggie Only" },
   { cuisine: "Indian", protein: "Veggie Only" },
   { cuisine: "Mexican", protein: "Fish" },
-  { cuisine: "Mediterranean", protein: "Red Meat" },
-  { cuisine: "Asian", protein: "Chicken" },
+  { cuisine: "Middle Eastern", protein: "Red Meat" },
+  { cuisine: "Thai", protein: "Chicken" },
   { cuisine: "Italian", protein: "Fish" },
   { cuisine: "Indian", protein: "Red Meat" },
   { cuisine: "Mexican", protein: "Chicken" },
-  { cuisine: "Mediterranean", protein: "Veggie Only" },
-  { cuisine: "Asian", protein: "Fish" },
+  { cuisine: "African", protein: "Veggie Only" },
+  { cuisine: "Vietnamese", protein: "Fish" },
   { cuisine: "Italian", protein: "Chicken" },
   { cuisine: "Indian", protein: "Fish" },
   { cuisine: "Mexican", protein: "Red Meat" },
-  { cuisine: "Mediterranean", protein: "Chicken" },
+  { cuisine: "Middle Eastern", protein: "Chicken" },
 ];
 
 export const FoodRandomizer = () => {
