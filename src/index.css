@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -138,4 +139,38 @@
 
 .animate-bounce-in {
   animation: bounce-in 0.5s ease-out forwards;
+}
+
+/* New animation keyframes for food randomizer */
+@keyframes food-shuffle {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(5px); }
+  100% { transform: translateY(0); }
+}
+
+.animate-food-shuffle {
+  animation: food-shuffle 0.3s ease-in-out infinite;
+}
+
+@keyframes food-symbol-pop {
+  0% { 
+    opacity: 0;
+    transform: translateY(10px) scale(0.5); 
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.2);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.animate-food-roulette > div > span {
+  display: inline-block;
+  animation: food-symbol-pop 0.6s ease-out forwards;
+  animation-fill-mode: forwards;
 }

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -55,12 +54,16 @@ export const FoodRandomizer = () => {
   const [cuisineFilter, setCuisineFilter] = useState<string | null>(null);
   const [proteinFilter, setProteinFilter] = useState<string | null>(null);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   
   useEffect(() => {
     document.title = "Food Fortune | What's For Dinner?";
   }, []);
 
   const randomizeFood = () => {
+    // Start the animation
+    setIsAnimating(true);
+    
     // Filter combinations based on user selections
     const filteredCombinations = FOOD_COMBINATIONS.filter(combo => {
       const cuisineMatch = !cuisineFilter || combo.cuisine === cuisineFilter;
@@ -72,13 +75,18 @@ export const FoodRandomizer = () => {
       toast.error("No matching combinations found", {
         description: "Please try different filter options",
       });
+      setIsAnimating(false);
       return;
     }
 
-    const randomIndex = Math.floor(Math.random() * filteredCombinations.length);
-    const newFood = filteredCombinations[randomIndex];
-    setCurrentFood(newFood);
-    setHasRandomized(true);
+    // Delay showing the result to allow for animation
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * filteredCombinations.length);
+      const newFood = filteredCombinations[randomIndex];
+      setCurrentFood(newFood);
+      setHasRandomized(true);
+      setIsAnimating(false);
+    }, 800); // Animation duration
   };
 
   const getSearchQuery = () => {
@@ -154,9 +162,9 @@ export const FoodRandomizer = () => {
         </CollapsibleContent>
       </Collapsible>
 
-      <Card className="w-full p-6 mb-6 border-dashed border-2 bg-food-secondary shadow-sm hover:shadow-md transition-all duration-300">
+      <Card className={`w-full p-6 mb-6 border-dashed border-2 bg-food-secondary shadow-sm hover:shadow-md transition-all duration-300 ${isAnimating ? 'animate-food-shuffle' : ''}`}>
         <div className="min-h-40 flex items-center justify-center">
-          {hasRandomized && currentFood ? (
+          {hasRandomized && currentFood && !isAnimating ? (
             <div className="text-center animate-bounce-in">
               <div className="flex justify-center items-center space-x-4 mb-3">
                 <span className="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
@@ -176,6 +184,24 @@ export const FoodRandomizer = () => {
                 </p>
               </div>
             </div>
+          ) : isAnimating ? (
+            <div className="animate-food-roulette">
+              <div className="text-center">
+                {Object.entries(CUISINE_EMOJIS).map(([cuisine, emoji], index) => (
+                  <span key={index} className="text-3xl mx-1 opacity-0" style={{ animationDelay: `${index * 50}ms` }}>
+                    {emoji}
+                  </span>
+                ))}
+              </div>
+              <div className="w-16 h-1 bg-primary mx-auto my-3 rounded-full"></div>
+              <div className="text-center">
+                {Object.entries(PROTEIN_EMOJIS).map(([protein, emoji], index) => (
+                  <span key={index} className="text-2xl mx-1 opacity-0" style={{ animationDelay: `${index * 100 + 200}ms` }}>
+                    {emoji}
+                  </span>
+                ))}
+              </div>
+            </div>
           ) : (
             <div className="text-center text-gray-500">
               <Utensils className="w-14 h-14 mx-auto mb-3 opacity-50" />
@@ -187,12 +213,14 @@ export const FoodRandomizer = () => {
 
       <Button
         onClick={randomizeFood}
-        className="bg-primary hover:bg-primary/90 text-white px-8 py-6 rounded-full mb-8 transition-all duration-300 hover:shadow-lg transform hover:scale-105 focus:scale-95"
+        disabled={isAnimating}
+        className={`bg-primary hover:bg-primary/90 text-white px-8 py-6 rounded-full mb-8 transition-all duration-300 hover:shadow-lg transform hover:scale-105 focus:scale-95 ${isAnimating ? 'animate-pulse' : ''}`}
       >
-        <Shuffle className="w-5 h-5 mr-2" /> Randomize!
+        <Shuffle className={`w-5 h-5 mr-2 ${isAnimating ? 'animate-spin' : ''}`} /> 
+        {isAnimating ? 'Randomizing...' : 'Randomize!'}
       </Button>
 
-      {hasRandomized && currentFood && (
+      {hasRandomized && currentFood && !isAnimating && (
         <div className="grid grid-cols-2 gap-4 w-full animate-fade-in">
           <Button
             onClick={handleFindRecipes}
