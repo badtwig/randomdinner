@@ -2,9 +2,10 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Utensils, Shuffle, BookOpen, ShoppingBag, Filter } from "lucide-react";
+import { Utensils, Shuffle, BookOpen, ShoppingBag, Filter, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const CUISINE_EMOJIS = {
   "Asian": "🥢",
@@ -49,6 +50,7 @@ export const FoodRandomizer = () => {
   const [hasRandomized, setHasRandomized] = useState(false);
   const [cuisineFilter, setCuisineFilter] = useState<string | null>(null);
   const [proteinFilter, setProteinFilter] = useState<string | null>(null);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   
   useEffect(() => {
     document.title = "Food Fortune | What's For Dinner?";
@@ -105,34 +107,48 @@ export const FoodRandomizer = () => {
         <p className="text-lg text-gray-600">Can't decide what to eat? Let us pick for you!</p>
       </div>
 
-      <div className="w-full mb-6 space-y-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Filter size={16} className="text-primary" />
-          <h3 className="font-medium">Filters</h3>
-        </div>
+      <Collapsible 
+        open={isFiltersOpen}
+        onOpenChange={setIsFiltersOpen}
+        className="w-full mb-6 border border-gray-200 rounded-lg overflow-hidden"
+      >
+        <CollapsibleTrigger asChild>
+          <Button 
+            variant="ghost" 
+            className="flex items-center justify-between w-full p-4 text-left border-b border-gray-200"
+          >
+            <div className="flex items-center gap-2">
+              <Filter size={16} className="text-primary" />
+              <span className="font-medium">Filters</span>
+            </div>
+            {isFiltersOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </Button>
+        </CollapsibleTrigger>
         
-        <div className="space-y-2">
-          <p className="text-sm text-gray-500">Cuisine:</p>
-          <ToggleGroup type="single" value={cuisineFilter || ""} onValueChange={(value) => setCuisineFilter(value || null)} className="flex flex-wrap justify-center gap-2">
-            {Object.keys(CUISINE_EMOJIS).map((cuisine) => (
-              <ToggleGroupItem key={cuisine} value={cuisine} className="px-3 py-1 border rounded-full text-sm">
-                {CUISINE_EMOJIS[cuisine as keyof typeof CUISINE_EMOJIS]} {cuisine}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </div>
-        
-        <div className="space-y-2">
-          <p className="text-sm text-gray-500">Protein:</p>
-          <ToggleGroup type="single" value={proteinFilter || ""} onValueChange={(value) => setProteinFilter(value || null)} className="flex flex-wrap justify-center gap-2">
-            {Object.keys(PROTEIN_EMOJIS).map((protein) => (
-              <ToggleGroupItem key={protein} value={protein} className="px-3 py-1 border rounded-full text-sm">
-                {PROTEIN_EMOJIS[protein as keyof typeof PROTEIN_EMOJIS]} {protein}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </div>
-      </div>
+        <CollapsibleContent className="p-4 space-y-4">
+          <div className="space-y-2">
+            <p className="text-sm text-gray-500">Cuisine:</p>
+            <ToggleGroup type="single" value={cuisineFilter || ""} onValueChange={(value) => setCuisineFilter(value || null)} className="flex flex-wrap justify-center gap-2">
+              {Object.keys(CUISINE_EMOJIS).map((cuisine) => (
+                <ToggleGroupItem key={cuisine} value={cuisine} className="px-3 py-1 border rounded-full text-sm">
+                  {CUISINE_EMOJIS[cuisine as keyof typeof CUISINE_EMOJIS]} {cuisine}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
+          
+          <div className="space-y-2">
+            <p className="text-sm text-gray-500">Protein:</p>
+            <ToggleGroup type="single" value={proteinFilter || ""} onValueChange={(value) => setProteinFilter(value || null)} className="flex flex-wrap justify-center gap-2">
+              {Object.keys(PROTEIN_EMOJIS).map((protein) => (
+                <ToggleGroupItem key={protein} value={protein} className="px-3 py-1 border rounded-full text-sm">
+                  {PROTEIN_EMOJIS[protein as keyof typeof PROTEIN_EMOJIS]} {protein}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
 
       <Card className="w-full p-6 mb-6 border-dashed border-2 bg-food-secondary shadow-sm hover:shadow-md transition-all duration-300">
         <div className="min-h-40 flex items-center justify-center">
