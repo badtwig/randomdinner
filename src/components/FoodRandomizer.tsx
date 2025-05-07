@@ -61,14 +61,32 @@ export const FoodRandomizer = () => {
   const [proteinFilter, setProteinFilter] = useState<string | null>(null);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showButtons, setShowButtons] = useState(false);
   
   useEffect(() => {
     document.title = "Food Fortune | What's For Dinner?";
   }, []);
 
+  // Add effect to handle delayed button appearance
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (hasRandomized && currentFood && !isAnimating) {
+      timeout = setTimeout(() => {
+        setShowButtons(true);
+      }, 800); // Delay buttons appearance by 800ms
+    } else {
+      setShowButtons(false);
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [hasRandomized, currentFood, isAnimating]);
+
   const randomizeFood = () => {
     // Start the animation
     setIsAnimating(true);
+    setShowButtons(false);
     
     // Filter combinations based on user selections
     const filteredCombinations = FOOD_COMBINATIONS.filter(combo => {
@@ -229,7 +247,7 @@ export const FoodRandomizer = () => {
       </Button>
 
       {hasRandomized && currentFood && !isAnimating && (
-        <div className="grid grid-cols-2 gap-4 w-full animate-fade-in">
+        <div className={`grid grid-cols-2 gap-4 w-full transition-all duration-500 ${showButtons ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <Button
             onClick={handleFindRecipes}
             variant="outline"
