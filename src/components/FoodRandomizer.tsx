@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Utensils, Shuffle, BookOpen, ShoppingBag, Filter, ChevronDown, ChevronUp } from "lucide-react";
+import { Utensils, Shuffle, BookOpen, ShoppingBag, Filter, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
