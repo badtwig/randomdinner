@@ -137,12 +137,21 @@ export const FoodRandomizer = () => {
 
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col items-center">
-      <div className="mb-6 text-center w-full">
-        <div className="flex items-center justify-center gap-3 mb-2">
+      <div className="mb-4 text-center w-full">
+        <div className="flex items-center justify-center gap-3 mb-1">
           <Utensils className="w-10 h-10 text-primary" />
           <h1 className="text-4xl font-bold">Food Fortune</h1>
         </div>
-        <p className="text-lg text-gray-600">Can't decide what to eat? Let us pick for you!</p>
+        <a 
+          href="https://badexperiment.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-muted text-muted-foreground rounded-full hover:bg-accent hover:text-accent-foreground transition-colors"
+        >
+          by badexperiment.com
+          <ExternalLink className="w-3 h-3" />
+        </a>
+        <p className="text-base text-muted-foreground mt-2">Can't decide what to eat? Let us pick for you!</p>
       </div>
 
       <Collapsible 
