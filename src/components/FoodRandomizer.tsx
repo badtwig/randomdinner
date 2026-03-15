@@ -69,7 +69,7 @@ export const FoodRandomizer = () => {
 
   // Add effect to handle delayed button appearance
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
     if (hasRandomized && currentFood && !isAnimating) {
       timeout = setTimeout(() => {
         setShowButtons(true);
