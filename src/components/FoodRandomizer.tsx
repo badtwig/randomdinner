@@ -64,7 +64,7 @@ export const FoodRandomizer = () => {
   const [showButtons, setShowButtons] = useState(false);
   
   useEffect(() => {
-    document.title = "Food Fortune | What's For Dinner?";
+    document.title = "Random Dinner | What's For Dinner?";
   }, []);
 
   // Add effect to handle delayed button appearance
